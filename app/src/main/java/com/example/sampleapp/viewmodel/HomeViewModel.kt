@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sampleapp.data.adapter.DataAdapter
+import com.example.sampleapp.data.adapter.RepoListener
 import com.example.sampleapp.model.GitHubResponseModel
 import com.example.sampleapp.model.ItemData
 import com.example.sampleapp.network.NetworkResult
@@ -33,6 +34,9 @@ class HomeViewModel @Inject constructor(
     fun getAdapter(): DataAdapter {
         return dataAdapter
     }
+    fun addOnClickListener(listener: RepoListener){
+        dataAdapter.setAdapterListener(listener)
+    }
 
     fun setAdapterData(data: ArrayList<ItemData>?) {
         data?.let {
@@ -40,4 +44,5 @@ class HomeViewModel @Inject constructor(
             dataAdapter.notifyDataSetChanged()
         }
     }
+
 }

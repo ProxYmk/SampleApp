@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.fragment.version)
 
     implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.fragment.ui.ktx)
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.dagger.hilt.android.compiler)
@@ -76,6 +77,8 @@ dependencies {
 
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockito)
+    testImplementation(libs.mockito.kotlin)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

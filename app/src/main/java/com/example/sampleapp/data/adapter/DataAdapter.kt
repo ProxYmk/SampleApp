@@ -13,8 +13,13 @@ import com.example.sampleapp.model.ItemData
 class DataAdapter : RecyclerView.Adapter<DataAdapter.ItemViewHolder>() {
     private var itemList = ArrayList<ItemData>()
 
+    private lateinit var repoListener: RepoListener
+
     fun setData(data: ArrayList<ItemData>) {
         this.itemList = data
+    }
+    fun setAdapterListener(listener: RepoListener){
+        repoListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -24,7 +29,11 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.ItemViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(itemList[position])
+        val item = itemList[position]
+        holder.bind(item)
+        holder.itemView.setOnClickListener {
+            repoListener.onClickListener(position, item)
+        }
     }
 
     override fun getItemCount(): Int {
