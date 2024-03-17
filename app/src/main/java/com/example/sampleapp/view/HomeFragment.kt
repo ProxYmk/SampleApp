@@ -8,12 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sampleapp.R
-import com.example.sampleapp.data.adapter.RepoListener
+import com.example.sampleapp.data.adapter.CardItemListener
 import com.example.sampleapp.databinding.FragmentHomeBinding
 import com.example.sampleapp.model.ItemData
 import com.example.sampleapp.network.NetworkResult
@@ -21,12 +20,10 @@ import com.example.sampleapp.viewmodel.HomeViewModel
 import com.example.sampleapp.viewmodel.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-
     private val homeViewModel: HomeViewModel by viewModels()
-    private  val sharedViewModel: SharedViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var _binding: FragmentHomeBinding
     private val binding get() = _binding
 
@@ -40,41 +37,39 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.executePendingBindings()
-
         binding.recyclerView.apply {
             adapter = homeViewModel.getAdapter()
-            homeViewModel.addOnClickListener(object : RepoListener{
+            val listener = object : CardItemListener {
                 override fun onClickListener(position: Int, item: ItemData) {
                     sharedViewModel.selectItem(item)
                     findNavController().navigate(R.id.action_homeFragment_to_detailFragment)
                 }
-
-            })
+            }
+            homeViewModel.addOnClickListener(listener)
             layoutManager = LinearLayoutManager(requireContext())
             val decoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
             addItemDecoration(decoration)
         }
         fetchData()
+        binding.executePendingBindings()
     }
 
     private fun fetchData() {
-        homeViewModel.makeApiCall()
-        homeViewModel.response.observe(viewLifecycleOwner) {
-            when (it) {
+        homeViewModel.getRepositories()
+        homeViewModel.response.observe(viewLifecycleOwner) { networkResult ->
+            when (networkResult) {
                 is NetworkResult.Error -> {
-                    Toast.makeText(requireContext(),
-                        getString(R.string.error_fetching_data), Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.error_fetching_data), Toast.LENGTH_LONG
+                    ).show()
                 }
-
                 is NetworkResult.Loading -> {
-                    binding.progressbar.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
                 }
-
                 is NetworkResult.Success -> {
-                    binding.progressbar.visibility = View.INVISIBLE
-                    homeViewModel.setAdapterData(it.data?.items)
+                    binding.progressBar.visibility = View.INVISIBLE
+                    homeViewModel.setAdapterData(networkResult.data?.items)
                 }
             }
         }

@@ -7,27 +7,28 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.sampleapp.R
-import com.example.sampleapp.databinding.ListLayoutBinding
+import com.example.sampleapp.databinding.CardItemLayoutBinding
 import com.example.sampleapp.model.ItemData
 
 class DataAdapter : RecyclerView.Adapter<DataAdapter.ItemViewHolder>() {
     private var itemList = ArrayList<ItemData>()
-
-    private lateinit var repoListener: RepoListener
+    private lateinit var cardItemListener: CardItemListener
 
     fun setData(data: ArrayList<ItemData>) {
         this.itemList = data
     }
+
     fun getData(): ArrayList<ItemData> {
         return this.itemList
     }
-    fun setAdapterListener(listener: RepoListener){
-        repoListener = listener
+
+    fun setAdapterListener(listener: CardItemListener) {
+        cardItemListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ListLayoutBinding.inflate(layoutInflater)
+        val binding = CardItemLayoutBinding.inflate(layoutInflater)
         return ItemViewHolder(binding)
     }
 
@@ -35,7 +36,7 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.ItemViewHolder>() {
         val item = itemList[position]
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            repoListener.onClickListener(position, item)
+            cardItemListener.onClickListener(position, item)
         }
     }
 
@@ -43,14 +44,15 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.ItemViewHolder>() {
         return itemList.size
     }
 
-    class ItemViewHolder(private val binding: ListLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ItemViewHolder(private val binding: CardItemLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ItemData) {
             binding.bindingText(data)
             binding.thumbImage.loadImage(data.owner.avatarUrl)
             binding.executePendingBindings()
         }
 
-        private fun ListLayoutBinding.bindingText(data: ItemData) {
+        private fun CardItemLayoutBinding.bindingText(data: ItemData) {
             nameTextView.text = data.name?.ifEmpty { "No Name available" }
             descTextView.text = data.description?.ifEmpty { "No Description available" }
             createdDateTextView.text = data.createdAt?.ifEmpty { "No Created date available" }

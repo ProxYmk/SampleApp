@@ -4,15 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sampleapp.data.adapter.CardItemListener
 import com.example.sampleapp.data.adapter.DataAdapter
-import com.example.sampleapp.data.adapter.RepoListener
 import com.example.sampleapp.model.GitHubResponseModel
 import com.example.sampleapp.model.ItemData
 import com.example.sampleapp.network.NetworkResult
 import com.example.sampleapp.repository.GitHubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.internal.notifyAll
 import javax.inject.Inject
 
 private const val KOTLIN_REPO_STRING: String = "kotlin"
@@ -23,19 +22,19 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _response: MutableLiveData<NetworkResult<GitHubResponseModel>> = MutableLiveData()
     val response: LiveData<NetworkResult<GitHubResponseModel>> = _response
+    var dataAdapter: DataAdapter = DataAdapter()
 
-    fun makeApiCall() = viewModelScope.launch {
+    fun getRepositories() = viewModelScope.launch {
         repository.getAllRepository(KOTLIN_REPO_STRING).collect { values ->
             _response.value = values
         }
     }
 
-    var dataAdapter: DataAdapter = DataAdapter()
-
     fun getAdapter(): DataAdapter {
         return dataAdapter
     }
-    fun addOnClickListener(listener: RepoListener){
+
+    fun addOnClickListener(listener: CardItemListener) {
         dataAdapter.setAdapterListener(listener)
     }
 

@@ -16,8 +16,8 @@ class DataAdapterTest {
     }
 
     @Test
-    fun testSetData_updatesItemListCorrectly() {
-        // Given
+    fun `setData updates itemList correctly`() {
+        // Given test data
       val testData = arrayListOf(
             ItemData(
                 name = "name",
@@ -31,10 +31,10 @@ class DataAdapterTest {
             )
       )
 
-        // When
+        // When set fake data
         adapter.setData(ArrayList(testData))
 
-        // Then
+        // Then check get same data
         val actualData = adapter.getData()
         assertEquals(testData, actualData)
     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="owner_image_dimension">200dp</dimen>
+    <dimen name="detail_card_margins">24dp</dimen>
+    <dimen name="recycler_item_card_height">150dp</dimen>
+    <dimen name="owner_image_dimension_card">100dp</dimen>
+</resources>

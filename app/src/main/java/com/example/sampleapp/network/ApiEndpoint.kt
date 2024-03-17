@@ -7,5 +7,5 @@ import retrofit2.http.Query
 
 interface ApiEndpoint {
     @GET("search/repositories")
-    suspend fun getAllRepository(@Query("q") q: String) : Response<GitHubResponseModel>
+    suspend fun getAllRepository(@Query("q") query: String): Response<GitHubResponseModel>
 }

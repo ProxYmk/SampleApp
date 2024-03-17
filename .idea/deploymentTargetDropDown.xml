@@ -11,13 +11,13 @@
       <entry key="clickButton_navigateToFragmentB()">
         <State />
       </entry>
-      <entry key="testFragmentWithNavController()">
-        <State />
-      </entry>
       <entry key="testHomePageIsDisplayed()">
         <State />
       </entry>
       <entry key="testNavigationToInGameScreen()">
+        <State />
+      </entry>
+      <entry key="test_isNewsItemsVisibleOnAppLaunch()">
         <State />
       </entry>
     </value>

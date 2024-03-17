@@ -14,7 +14,6 @@ import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -30,26 +29,22 @@ import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
 class HomeViewModelTest {
-
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: DataAdapter
-
     private val testDispatcher = UnconfinedTestDispatcher()
-
     private val repository: GitHubRepository = mockk()
-    fun readJsonFromResource(fileName: String): String {
-        return this::class.java.classLoader?.getResource(fileName)?.readText() ?: ""
-    }
 
+    private fun readJsonFromResource(): String {
+        return this::class.java.classLoader?.getResource("mock_response.json")?.readText() ?: ""
+    }
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         adapter = mock(DataAdapter::class.java) // Mock the adapter
-        val mockJsonResponse = readJsonFromResource("mock_response.json")
-        // Convert JSON string to your model object
+        val mockJsonResponse = readJsonFromResource()
+        // Convert JSON string to GitHubResponseModel object
         val gson = Gson()
         val mockResponse = gson.fromJson(mockJsonResponse, GitHubResponseModel::class.java)
 
@@ -57,6 +52,7 @@ class HomeViewModelTest {
         coEvery { repository.getAllRepository(any()) } returns flowOf(NetworkResult.Success(mockResponse))
         // Initialize ViewModel
         viewModel = HomeViewModel(repository)
+        // Set mock adapter
         viewModel.dataAdapter = adapter
     }
 
@@ -67,14 +63,12 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `makeApiCall updates LiveData with Success`() = runTest {
-        // Given a ViewModel with a mocked repository
-
-        // When making an API call
+    fun `getRepositories updates LiveData with Success`() = runTest {
+        // Given a ViewModel with a mocked repository onSetup
+        // When making an API call getRepositories
         launch {
-            viewModel.makeApiCall()
+            viewModel.getRepositories()
         }
-        delay(1000)
 
         // Then the response LiveData should be updated with success
         viewModel.response.observeForever {
@@ -100,6 +94,7 @@ class HomeViewModelTest {
         )
         // When setting adapter data
         viewModel.setAdapterData(testData)
+        // then verify if DataSetChanged
         verify(adapter).notifyDataSetChanged()
     }
 }

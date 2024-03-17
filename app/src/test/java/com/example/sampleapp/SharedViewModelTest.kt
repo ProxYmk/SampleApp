@@ -15,10 +15,8 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class SharedViewModelTest {
-
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
-
     private lateinit var viewModel: SharedViewModel
 
     @Before
@@ -27,8 +25,8 @@ class SharedViewModelTest {
     }
 
     @Test
-    fun selectItem_updatesSelectedItem() {
-        // Arrange
+    fun `selectItem updates SelectedItem`() {
+        // Given test data
         val testItem = ItemData(
             name = "name",
             fullName = "full name",
@@ -39,14 +37,14 @@ class SharedViewModelTest {
             createdAt = "created at",
             Owner("https://secure.gravatar.com/avatar/420.png")
         )
+        // set observers
         val observer: Observer<ItemData> = mock(Observer::class.java) as Observer<ItemData>
-
         viewModel.selectedItem.observeForever(observer)
 
-        // Act
+        // When
         viewModel.selectItem(testItem)
 
-        // Assert
+        // Then verify data change
         verify(observer).onChanged(testItem)
     }
 }
