@@ -26,6 +26,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner = "com.example.sampleapp.HiltTestRunner"
     }
 
     buildTypes {
@@ -66,11 +67,20 @@ dependencies {
 
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.fragment.ui.ktx)
-    // Hilt
+
+
     implementation(libs.hilt.android)
+    implementation(libs.androidx.espresso.contrib)
+    implementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    implementation(libs.androidx.fragment.testing)
+
     kapt(libs.dagger.hilt.android.compiler)
 
-    //Coroutines
+    kaptTest(libs.dagger.hilt.android.compiler)
+    androidTestImplementation(libs.hilt.test)
+    kaptAndroidTest(libs.dagger.hilt.android.compiler)
+
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.services)
@@ -79,6 +89,13 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
     testImplementation(libs.mockito.kotlin)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.mockito.inline)
+    testImplementation(libs.mockk)
+    testImplementation(libs.arch.core.test)
+    androidTestImplementation(libs.arch.core.test)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.gson.test)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

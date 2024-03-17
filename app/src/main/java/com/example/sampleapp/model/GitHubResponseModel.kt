@@ -8,7 +8,7 @@ data class ItemData(
     @SerializedName("full_name") val fullName: String?,
     val url: String?,
     val language: String?,
-    val forks: String?,
+    val forks: Int?,
     val description: String?,
     @SerializedName("created_at") val createdAt: String?,
     val owner: Owner

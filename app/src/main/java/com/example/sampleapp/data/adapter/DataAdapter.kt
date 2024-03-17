@@ -18,6 +18,9 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.ItemViewHolder>() {
     fun setData(data: ArrayList<ItemData>) {
         this.itemList = data
     }
+    fun getData(): ArrayList<ItemData> {
+        return this.itemList
+    }
     fun setAdapterListener(listener: RepoListener){
         repoListener = listener
     }

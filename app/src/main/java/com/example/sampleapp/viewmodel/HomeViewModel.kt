@@ -12,6 +12,7 @@ import com.example.sampleapp.network.NetworkResult
 import com.example.sampleapp.repository.GitHubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.internal.notifyAll
 import javax.inject.Inject
 
 private const val KOTLIN_REPO_STRING: String = "kotlin"
@@ -29,7 +30,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private var dataAdapter: DataAdapter = DataAdapter()
+    var dataAdapter: DataAdapter = DataAdapter()
 
     fun getAdapter(): DataAdapter {
         return dataAdapter
